@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>Admin Dashboard</h2>
+    <button onclick="logout()" class="btn">Logout</button>
+</nav>
+
+<div class="dashboard">
+
+    <h2>Manage Maintenance Requests</h2>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Resident</th>
+                    <th>Apartment</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Assign Staff</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="adminRequestList"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="js/admin.js"></script>
+
+</body>
+</html>

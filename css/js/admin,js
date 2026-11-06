@@ -1,0 +1,198 @@
+const token = localStorage.getItem('token');
+
+const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+if (!token || !user || user.role !== 'admin') {
+    window.location.href = 'login.html';
+}
+
+let staffMembers = [];
+
+async function loadStaff() {
+    const response = await fetch('/api/admin/staff', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (!response.ok) throw new Error('Unable to load staff');
+
+    staffMembers = await response.json();
+}
+
+async function loadAdminRequests() {
+    try {
+        const response = await fetch('/api/admin/requests', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) throw new Error('Unable to load requests');
+
+        const requests = await response.json();
+
+        const tbody = document.getElementById('adminRequestList');
+        tbody.replaceChildren();
+
+        requests.forEach(request => {
+            const tr = document.createElement('tr');
+
+            function cell(value) {
+                const td = document.createElement('td');
+                td.textContent = value ?? '';
+                tr.appendChild(td);
+                return td;
+            }
+
+            cell(request.request_id);
+            cell(request.resident_name);
+            cell(request.apartment_no || '-');
+            cell(request.title);
+            cell(request.category_name);
+            cell(request.priority);
+
+            // Staff assignment
+            const assignCell = cell('');
+            const staffSelect = document.createElement('select');
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Select Staff';
+
+            staffSelect.appendChild(defaultOption);
+
+            staffMembers.forEach(staff => {
+                const option = document.createElement('option');
+                option.value = staff.user_id;
+                option.textContent = staff.full_name;
+
+                if (staff.user_id === request.assigned_to) {
+                    option.selected = true;
+                }
+
+                staffSelect.appendChild(option);
+            });
+
+            const assignButton = document.createElement('button');
+            assignButton.textContent = 'Assign';
+            assignButton.className = 'btn';
+
+            assignButton.addEventListener('click', () => {
+                assignStaff(request.request_id, staffSelect.value);
+            });
+
+            assignCell.append(staffSelect, assignButton);
+
+            // Status
+            const statusCell = cell('');
+            const statusSelect = document.createElement('select');
+
+            ['Pending', 'In Progress', 'Completed', 'Rejected']
+                .forEach(status => {
+                    const option = document.createElement('option');
+                    option.value = status;
+                    option.textContent = status;
+
+                    if (request.status === status) {
+                        option.selected = true;
+                    }
+
+                    statusSelect.appendChild(option);
+                });
+
+            statusCell.appendChild(statusSelect);
+
+            // Update button
+            const actionCell = cell('');
+            const updateButton = document.createElement('button');
+
+            updateButton.textContent = 'Update';
+            updateButton.className = 'btn';
+
+            updateButton.addEventListener('click', () => {
+                updateStatus(request.request_id, statusSelect.value);
+            });
+
+            actionCell.appendChild(updateButton);
+
+            tbody.appendChild(tr);
+        });
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function assignStaff(requestId, staffId) {
+    if (!staffId) {
+        alert('Please select a staff member');
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/api/admin/requests/${requestId}/assign`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ staff_id: staffId })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) throw new Error(result.message);
+
+        alert(result.message);
+        loadAdminRequests();
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function updateStatus(requestId, status) {
+    try {
+        const response = await fetch(
+            `/api/admin/requests/${requestId}/status`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    status,
+                    remarks: 'Status updated by administrator'
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) throw new Error(result.message);
+
+        alert(result.message);
+        loadAdminRequests();
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function initializeAdmin() {
+    try {
+        await loadStaff();
+        await loadAdminRequests();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+if (token && user && user.role === 'admin') {
+    initializeAdmin();
+}

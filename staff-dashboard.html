@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>Maintenance Staff Dashboard</h2>
+    <button onclick="logout()" class="btn">Logout</button>
+</nav>
+
+<div class="dashboard">
+
+    <h2>My Assigned Tasks</h2>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Resident</th>
+                    <th>Apartment</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+
+            <tbody id="staffTaskList"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="js/staff.js"></script>
+
+</body>
+</html>

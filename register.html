@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Registration</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Resident Registration</h2>
+
+    <form id="registerForm">
+
+        <input type="text" id="full_name"
+            placeholder="Full Name" required>
+
+        <input type="email" id="email"
+            placeholder="Email Address" required>
+
+        <input type="password" id="password"
+            placeholder="Password (minimum 8 characters)"
+            minlength="8" required>
+
+        <input type="tel" id="phone"
+            placeholder="Phone Number">
+
+        <input type="text" id="apartment_no"
+            placeholder="Apartment / Flat Number">
+
+        <button type="submit" class="btn">Register</button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <p>Already registered?
+        <a href="login.html">Login here</a>
+    </p>
+
+    <a href="index.html">Back to Home</a>
+</div>
+
+<script src="js/auth.js"></script>
+
+</body>
+</html>

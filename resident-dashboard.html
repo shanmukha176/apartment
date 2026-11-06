@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>Resident Dashboard</h2>
+    <button onclick="logout()" class="btn">Logout</button>
+</nav>
+
+<div class="dashboard">
+
+    <h2>Welcome, Resident!</h2>
+
+    <div class="form-container">
+        <h3>Submit Maintenance Request</h3>
+
+        <form id="requestForm">
+
+            <input type="text" id="title"
+                placeholder="Request Title" required>
+
+            <select id="category_id" required>
+                <option value="">Select Category</option>
+            </select>
+
+            <textarea id="description"
+                placeholder="Describe your problem"
+                required></textarea>
+
+            <select id="priority">
+                <option value="Low">Low Priority</option>
+                <option value="Medium" selected>Medium Priority</option>
+                <option value="High">High Priority</option>
+            </select>
+
+            <button type="submit" class="btn">
+                Submit Request
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+    </div>
+
+    <h2>My Maintenance Requests</h2>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Assigned Staff</th>
+                </tr>
+            </thead>
+
+            <tbody id="requestList"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="js/resident.js"></script>
+
+</body>
+</html>
